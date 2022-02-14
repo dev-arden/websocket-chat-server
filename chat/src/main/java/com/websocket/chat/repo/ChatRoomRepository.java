@@ -1,21 +1,18 @@
 package com.websocket.chat.repo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
+import com.websocket.chat.model.ChatRoom;
+import com.websocket.chat.pubsub.RedisSubscriber;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
-import com.websocket.chat.model.ChatRoom;
-import com.websocket.chat.pubsub.RedisSubscriber;
-
-import lombok.RequiredArgsConstructor;
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -59,11 +56,10 @@ public class ChatRoomRepository {
      */
     public void enterChatRoom(String roomId) {
         ChannelTopic topic = topics.get(roomId);
-        if (topic == null) {
+        if (topic == null)
             topic = new ChannelTopic(roomId);
-            redisMessageListener.addMessageListener(redisSubscriber, topic);
-            topics.put(roomId, topic);
-        }
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        topics.put(roomId, topic);
     }
 
     public ChannelTopic getTopic(String roomId) {
