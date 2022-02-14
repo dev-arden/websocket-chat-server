@@ -1,10 +1,10 @@
 package com.websocket.chat.model;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,4 +21,4 @@ public class ChatRoom implements Serializable {
         chatRoom.name = name;
         return chatRoom;
     }
-}       
+}
