@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- FAQ SQL Mapper -->
+<mapper namespace="com.websocket.chat.mapper.ChatMapper">
+
+    <select id="test" resultType="int">
+        SELECT COUNT(*) FROM CHAT
+    </select>
+    
+    <select id="findAllRoom" resultType="ChatRoom">
+        SELECT * FROM CHAT
+    </select>
+    
+    <insert id="createChatroom">
+	    INSERT Chat (room_id, name) VALUES (#roomId}, #{name})
+	</insert>
+
+</mapper>

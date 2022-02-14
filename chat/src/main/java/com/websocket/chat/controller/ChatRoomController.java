@@ -2,6 +2,7 @@ package com.websocket.chat.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.websocket.chat.mapper.ChatMapper;
 import com.websocket.chat.model.ChatRoom;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/chat")
 public class ChatRoomController {
-
  private final com.websocket.chat.repo.ChatRoomRepository chatRoomRepository;
 
  // 채팅 리스트 화면
