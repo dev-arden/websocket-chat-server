@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import com.websocket.chat.model.ChatRoom;
 public class ChatRoomRepository {
 
  private Map<String, ChatRoom> chatRoomMap;
+ @Autowired
  private ChatMapper chatmapper;
 
 // @PostConstruct
@@ -39,12 +41,12 @@ public class ChatRoomRepository {
 	 return chatmapper.findRoomById(id);
  }
 
- public ChatRoom createChatRoom(String name) {
+ public void createChatRoom(String name) {
      ChatRoom chatRoom = ChatRoom.create(name);
-     chatRoom.setName(chatRoom.getName());
-     chatRoom.setRoomId(chatRoom.getRoomId());
-     chatmapper.createChatroom(chatRoom);
+//     chatRoom.setName(chatRoom.getName());
+//     chatRoom.setRoomId(chatRoom.getRoomId());
      //chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
-     return chatmapper.createChatroom(chatRoom);
+     chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
+     //return chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
  }
 }

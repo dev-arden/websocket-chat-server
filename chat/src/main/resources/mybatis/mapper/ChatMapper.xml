@@ -2,17 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- FAQ SQL Mapper -->
 <mapper namespace="com.websocket.chat.mapper.ChatMapper">
+	<resultMap type = "ChatRoom" id = "ChatRoom">
+		<result column="roomId" property="roomId" />
+		<result column="name" property="name" />
+	</resultMap> 
 
     <select id="test" resultType="int">
         SELECT COUNT(*) FROM CHAT
     </select>
     
-    <select id="findAllRoom" resultType="ChatRoom">
+    <select id="findAllRoom" resultMap="ChatRoom">
         SELECT * FROM CHAT
     </select>
     
-    <insert id="createChatroom">
-	    INSERT Chat (room_id, name) VALUES (#roomId}, #{name})
+    <insert id="createChatroom" parameterType="map">
+	    INSERT Chat (roomId, name) VALUES (#{roomId}, #{name})
 	</insert>
 
 </mapper>
