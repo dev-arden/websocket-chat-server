@@ -1,6 +1,6 @@
 # websocket-chat-server with Springboot
 
-##System Setting
+## System Setting
 > Springboot, MySQL, MyBatis, HTML, Vue.js
 
 ## System function
