@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.websocket.chat.mapper.ChatMapper;
 import com.websocket.chat.model.ChatRoom;
-
+import com.websocket.chat.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +23,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/chat")
 public class ChatRoomController {
 	
-	 private final com.websocket.chat.repo.ChatRoomRepository chatRoomRepository;
-	
+	 //private final com.websocket.chat.repo.ChatRoomRepository chatRoomRepository;
+	@Autowired
+	private ChatRoomService chatroomservice;
 	
 	 // 채팅 리스트 화면
 	 @GetMapping("/room")
@@ -35,13 +36,13 @@ public class ChatRoomController {
 	 @GetMapping("/rooms")
 	 @ResponseBody
 	 public List<ChatRoom> room() {
-	     return chatRoomRepository.findAllRoom();
+	     return chatroomservice.findAllRoom();
 	 }
 	 // 채팅방 생성
 	 @PostMapping("/room")
 	 @ResponseBody
 	 public void createRoom(@RequestParam String name) {
-		 chatRoomRepository.createRoom(name);
+		 chatroomservice.createRoom(name);
 	     //return chatRoomRepository.createChatRoom(name);
 	 }
 	 // 채팅방 입장 화면
@@ -54,6 +55,6 @@ public class ChatRoomController {
 	 @GetMapping("/room/{roomId}")
 	 @ResponseBody
 	 public ChatRoom roomInfo(@PathVariable String roomId) {
-	     return chatRoomRepository.findRoomById(roomId);
+	     return chatroomservice.findRoomById(roomId);
 	 }
 }
