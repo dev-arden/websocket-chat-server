@@ -13,6 +13,6 @@ public interface ChatMapper {
 	public int test();
 	
 	public List<ChatRoom> findAllRoom();
-	public ChatRoom findRoomById(String id);
-	public void createChatroom(@Param("roomId") String roomId, @Param("name") String name);
+	public ChatRoom findRoomById(@Param("roomId") String roomId);
+	public void createRoom(@Param("roomId") String roomId, @Param("name") String name);
 }

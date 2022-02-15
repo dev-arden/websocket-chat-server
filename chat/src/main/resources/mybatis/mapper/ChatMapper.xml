@@ -15,8 +15,31 @@
         SELECT * FROM CHAT
     </select>
     
+    <select id="findRoomById" resultMap="ChatRoom" parameterType="map">
+    	SELECT 
+    		*
+    	FROM
+    		CHAT
+    	WHERE
+    		roomId = #{roomId}
+    </select>
+    
+    <!--  
     <insert id="createChatroom" parameterType="map">
 	    INSERT Chat (roomId, name) VALUES (#{roomId}, #{name})
 	</insert>
-
+	-->
+	
+	<insert id="createRoom" parameterType="map">
+		INSERT Chat (roomId, name) VALUES (#{roomId}, #{name})
+	    <selectKey keyColumn="name" keyProperty="name" order="AFTER" resultType="String">
+	    	SELECT
+	    		name
+	    	FROM
+	    		Chat
+	    	WHERE
+	    		roomId = #{roomId}
+	    	AND name = #{name}
+	    </selectKey>
+	</insert>
 </mapper>

@@ -36,17 +36,17 @@ public class ChatRoomRepository {
 	 return chatmapper.findAllRoom();
  }
 
- public ChatRoom findRoomById(String id) {
+ public ChatRoom findRoomById(String roomId) {
      //return chatRoomMap.get(id);
-	 return chatmapper.findRoomById(id);
+	 return chatmapper.findRoomById(roomId);
  }
 
- public void createChatRoom(String name) {
+ public void createRoom(String name) {
      ChatRoom chatRoom = ChatRoom.create(name);
 //     chatRoom.setName(chatRoom.getName());
 //     chatRoom.setRoomId(chatRoom.getRoomId());
      //chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
-     chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
+     chatmapper.createRoom(chatRoom.getRoomId(), chatRoom.getName());
      //return chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
  }
 }
