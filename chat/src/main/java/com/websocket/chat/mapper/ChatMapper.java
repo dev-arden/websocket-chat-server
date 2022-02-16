@@ -10,9 +10,8 @@ import com.websocket.chat.model.ChatRoom;
 
 @Mapper
 public interface ChatMapper {
-	public int test();
-	
 	public List<ChatRoom> findAllRoom();
 	public ChatRoom findRoomById(@Param("roomId") String roomId);
-	public void createRoom(@Param("roomId") String roomId, @Param("name") String name);
+	public void createRoom(@Param("roomId") String roomId, @Param("name") String name, @Param("ownerId") String ownerId);
+	public String findOwner(@Param("roomId") String roomId);
 }

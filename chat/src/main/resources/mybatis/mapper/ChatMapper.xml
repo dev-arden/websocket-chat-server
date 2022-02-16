@@ -6,30 +6,35 @@
 		<result column="roomId" property="roomId" />
 		<result column="name" property="name" />
 	</resultMap> 
-
-    <select id="test" resultType="int">
-        SELECT COUNT(*) FROM CHAT
-    </select>
-    
+	
     <select id="findAllRoom" resultMap="ChatRoom">
-        SELECT * FROM CHAT
+        SELECT * FROM Chat
     </select>
     
     <select id="findRoomById" resultMap="ChatRoom" parameterType="map">
     	SELECT 
     		*
     	FROM
-    		CHAT
+    		Chat
     	WHERE
     		roomId = #{roomId}
     </select>
     
-    <!--  
-    <insert id="createChatroom" parameterType="map">
-	    INSERT Chat (roomId, name) VALUES (#{roomId}, #{name})
+    
+    <insert id="createRoom" parameterType="map">
+	    INSERT Chat (roomId, name, ownerId) VALUES (#{roomId}, #{name}, #{ownerId})
 	</insert>
-	-->
 	
+	<select id="findOwner" resultType="String" parameterType="map">
+    	SELECT 
+    		ownerId
+    	FROM
+    		Chat
+    	WHERE
+    		roomId = #{roomId}
+    </select>
+	
+	<!--  
 	<insert id="createRoom" parameterType="map">
 		INSERT Chat (roomId, name) VALUES (#{roomId}, #{name})
 	    <selectKey keyColumn="name" keyProperty="name" order="AFTER" resultType="String">
@@ -42,4 +47,5 @@
 	    	AND name = #{name}
 	    </selectKey>
 	</insert>
+	-->
 </mapper>

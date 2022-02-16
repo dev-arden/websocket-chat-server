@@ -32,12 +32,16 @@ public class ChatRoomService {
 		 return chatmapper.findRoomById(roomId);
 	 }
 
-	 public void createRoom(String name) {
-	     ChatRoom chatRoom = ChatRoom.create(name);
+	 public void createRoom(String name, String ownerId) {
+	     ChatRoom chatRoom = ChatRoom.create(name, ownerId);
 //	     chatRoom.setName(chatRoom.getName());
 //	     chatRoom.setRoomId(chatRoom.getRoomId());
 	     //chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
-	     chatmapper.createRoom(chatRoom.getRoomId(), chatRoom.getName());
+	     chatmapper.createRoom(chatRoom.getRoomId(), chatRoom.getName(), chatRoom.getOwnerId());
 	     //return chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
+	 }
+	 
+	 public String findOwner(String roomId) {
+		 return chatmapper.findOwner(roomId);
 	 }
 }
