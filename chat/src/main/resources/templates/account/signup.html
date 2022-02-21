@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Websocket Chat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <style>
+      [v-cloak] {
+          display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="app" v-cloak>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>회원가입</h3>
+            </div>
+        </div>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <label class="input-group-text">id</label>
+            </div>
+            <input type="text" class="form-control" v-model="id">
+            <div class="input-group-prepend">
+                <label class="input-group-text">password</label>
+            </div>
+            <input type="text" class="form-control" v-model="password">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" @click="signup">join</button>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript -->
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id : '',
+                password: '',
+            },
+            methods: {
+				login : function(){
+					axios.get('/login');
+				},
+                signup: function() {
+                    var params = new URLSearchParams();
+                    params.append("id",this.id);
+                    params.append("password", this.password);
+                    axios.post('/members', params)
+                    .then(
+                        response => {
+                            alert("join!")
+                            this.id = '';
+                            this.password = '';
+                            location.href="/login";
+                        }
+                    )
+                    .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+                }      
+            }
+        });
+    </script>
+  </body>
+</html>

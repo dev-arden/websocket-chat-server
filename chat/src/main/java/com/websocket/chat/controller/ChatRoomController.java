@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.websocket.chat.mapper.ChatMapper;
-import com.websocket.chat.model.Account;
 import com.websocket.chat.model.ChatRoom;
-import com.websocket.chat.repository.AccountRepository;
 import com.websocket.chat.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,26 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/chat")
 public class ChatRoomController {
 	
-	 //private final com.websocket.chat.repo.ChatRoomRepository chatRoomRepository;
 	@Autowired
 	private ChatRoomService chatroomservice;
-	@Autowired
-	AccountRepository accounts;
-	
-	/*
-	 * private final JwtTokenProvider jwtTokenProvider;
-
-@GetMapping("/user")
-@ResponseBody
-public LoginInfo getUserInfo() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String name = auth.getName();
-    return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(name)).build();
-}
-	 * 
-	 * 
-	 * */
-	
 
 	@GetMapping("/user")
 	@ResponseBody
@@ -102,11 +81,4 @@ public LoginInfo getUserInfo() {
 	 public ChatRoom roomOwnerInfo(@PathVariable String roomId, @PathVariable String ownerId) {
 	     return chatroomservice.findRoomOwnerById(roomId, ownerId);
 	 }
-	 
-	 //채팅방 owner 조회
-//	 @GetMapping("/room/owner/{roomId}")
-//	 @ResponseBody
-//	 public String ownerInfo(Model model, @PathVariable String roomId) {
-//	     return "/chat/roomdetail";
-//	 }
 }

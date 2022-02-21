@@ -83,7 +83,8 @@ public class AccountService implements UserDetailsService{
 	}
 	public Account save(Account account,String role) {
 		// TODO Auto-generated method stub
-
+		
+		account.setId(account.getId());
 		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		account.setAccountNonExpired(true);
 		account.setAccountNonLocked(true);
