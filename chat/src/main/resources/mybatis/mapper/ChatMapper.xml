@@ -20,6 +20,17 @@
     		roomId = #{roomId}
     </select>
     
+    <select id="findRoomOwnerById" resultMap="ChatRoom" parameterType="map">
+    	SELECT
+    		*
+    	FROM
+    		Chat
+    	WHERE
+    		roomId = #{roomId}
+    	AND
+    		ownerId = #{ownerId}
+    </select>
+    
     
     <insert id="createRoom" parameterType="map">
 	    INSERT Chat (roomId, name, ownerId) VALUES (#{roomId}, #{name}, #{ownerId})

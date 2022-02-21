@@ -14,4 +14,16 @@ public class ChatMessage {
     private String roomId; // 방번호
     private String sender; // 메시지 보낸사람
     private String message; // 메시지
+    
+    /*
+     * 방 권한 -> localsetStorage                         
+     * 0 : permission denied
+     * 1 : permission accepted
+     * findOwner -> 
+     * 	if owner
+     * 		enter 
+     *  else 
+     *  	owner한테 메시지 
+     * */
+    private int auth; 
 }

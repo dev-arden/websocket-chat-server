@@ -44,4 +44,8 @@ public class ChatRoomService {
 	 public String findOwner(String roomId) {
 		 return chatmapper.findOwner(roomId);
 	 }
+	 
+	 public ChatRoom findRoomOwnerById(String roomId, String ownerId) {
+		 return chatmapper.findRoomOwnerById(roomId,ownerId);
+	 }
 }

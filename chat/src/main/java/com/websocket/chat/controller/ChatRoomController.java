@@ -3,6 +3,8 @@ package com.websocket.chat.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.websocket.chat.mapper.ChatMapper;
+import com.websocket.chat.model.Account;
 import com.websocket.chat.model.ChatRoom;
+import com.websocket.chat.repository.AccountRepository;
 import com.websocket.chat.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +30,32 @@ public class ChatRoomController {
 	 //private final com.websocket.chat.repo.ChatRoomRepository chatRoomRepository;
 	@Autowired
 	private ChatRoomService chatroomservice;
+	@Autowired
+	AccountRepository accounts;
 	
+	/*
+	 * private final JwtTokenProvider jwtTokenProvider;
+
+@GetMapping("/user")
+@ResponseBody
+public LoginInfo getUserInfo() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String name = auth.getName();
+    return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(name)).build();
+}
+	 * 
+	 * 
+	 * */
+	
+
+	@GetMapping("/user")
+	@ResponseBody
+	public String getUserInfo() {
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String id = auth.getName();
+		 return id;
+	}
+
 	 // 채팅 리스트 화면
 	 @GetMapping("/room")
 	 public String rooms(Model model) {
@@ -45,6 +74,7 @@ public class ChatRoomController {
 		 chatroomservice.createRoom(name, ownerId);
 	     //return chatRoomRepository.createChatRoom(name);
 	 }
+	 
 	 // 채팅방 입장 화면
 	 @GetMapping("/room/enter/{roomId}")
 	 public String roomDetail(Model model, @PathVariable String roomId) {
@@ -57,4 +87,26 @@ public class ChatRoomController {
 	 public ChatRoom roomInfo(@PathVariable String roomId) {
 	     return chatroomservice.findRoomById(roomId);
 	 }
+	 
+	// 채팅방 입장 요청 화면
+	 @GetMapping("/room/enter/{roomId}/{ownerId}")
+	 public String roomPermission(Model model, @PathVariable String roomId, @PathVariable String ownerId) {
+	     model.addAttribute("roomId", roomId);
+	     model.addAttribute("ownerId", ownerId);
+	     return "/chat/roompermission";
+	 }
+	 
+	// 특정 채팅방 조회
+	 @GetMapping("/room/{roomId}/{ownerId}")
+	 @ResponseBody
+	 public ChatRoom roomOwnerInfo(@PathVariable String roomId, @PathVariable String ownerId) {
+	     return chatroomservice.findRoomOwnerById(roomId, ownerId);
+	 }
+	 
+	 //채팅방 owner 조회
+//	 @GetMapping("/room/owner/{roomId}")
+//	 @ResponseBody
+//	 public String ownerInfo(Model model, @PathVariable String roomId) {
+//	     return "/chat/roomdetail";
+//	 }
 }
