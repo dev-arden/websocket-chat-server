@@ -32,7 +32,7 @@
 	        	<div>
 	                <label class="input-group-text">password</label>
 	            </div>
-	            <input type="text" class="form-control" v-model="password">   
+	            <input type="password" class="form-control" v-model="password">   
 	    	</div>    
 	            
 	        <div class="input-group-append">
@@ -70,7 +70,7 @@
                             location.href="/chat/room";
                         }
                     )
-                    .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+                    .catch( response => { alert("로그인에 실패하였습니."); } );
                 }     
             }
         });
