@@ -1,20 +1,79 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <title>login</title>
+    <title>Websocket Chat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <style>
+      [v-cloak] {
+          display: none;
+      }
+    </style>
   </head>
   <body>
-    <h1>Login</h1> <hr>
-    <img src="/img/info.jpeg" />
+    <div class="container" id="app" v-cloak>
 
-    <form action="/login" method="POST">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-      email : <input type="text" name="username"> <br>
-      password : <input type="password" name="password"> <br>
-      <button type="submit">Login</button>
-    </form> <br>
+	        <div class="row">
+	            <div class="col-md-6">
+	                <h3>로그인</h3>
+	            </div>
+	        </div>
 
-    <a href="/signup">Go to join! →</a>
+	        <div class="input-group">
+	            <div class="input-group-prepend">
+	                <label class="input-group-text">id</label>
+	            </div>
+	            <input type="text" class="form-control" v-model="id">
+	        </div>
+        
+	        <div class="input-group-prepend">
+	        	<div>
+	                <label class="input-group-text">password</label>
+	            </div>
+	            <input type="text" class="form-control" v-model="password">   
+	    	</div>    
+	            
+	        <div class="input-group-append">
+	            <button class="btn btn-primary" type="button" @click="login">login</button>
+	        </div>
+    
+    		<div>
+			  <a href="/members">회원가입</a>
+			</div>
+    </div>
+    <!-- JavaScript -->
+    <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id : '',
+                password: ''
+            },
+            created() {
+                console.log("dddd");
+            },
+            methods: {
+                login: function() {
+                    var params = new URLSearchParams();
+                    params.append("id",this.id);
+                    params.append("password", this.password);
+                    axios.post('/sessions', params)
+                    .then(
+                        response => {
+                            alert("login!");
+                            this.id = '';
+                            this.password = '';
+                            location.href="/chat/room";
+                        }
+                    )
+                    .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+                }     
+            }
+        });
+    </script>
   </body>
 </html>

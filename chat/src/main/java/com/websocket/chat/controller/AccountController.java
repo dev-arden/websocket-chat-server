@@ -44,17 +44,29 @@ public class AccountController {
 	
 	@GetMapping("/members")
 	public String members(Model model) {
-		return "account/signup";
+		return "/account/signup";
 	}
 	
 	@PostMapping("/members")
 	//@ResponseBody
-	public String addUser(@RequestParam String id, @RequestParam String password) {
+	public void addUser(@RequestParam String id, @RequestParam String password) {
 		Account account = new Account();
 		account.setId(id);
 		account.setPassword(password);
 		accountService.save(account, "ROLE_USER");
-		return "redirect:/login";
 	}
 
+	@GetMapping("/sessions")
+	public String session(Model model) {
+		return "/account/login";
+	}
+	
+	@PostMapping("/sessions")
+	public String login(@RequestParam String id, @RequestParam String password) {
+		if(accountService.login(id, password) == 1){
+			return "/chat/room";
+		} else {
+			return "/account/login";
+		}
+	}
 }

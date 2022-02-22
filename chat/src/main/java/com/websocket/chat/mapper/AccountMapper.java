@@ -24,4 +24,7 @@ public interface AccountMapper {
 
     @Select("SELECT* FROM USER")
     List<Account> readAllUsers();
+    
+    @Select("SELECT COUNT(*) FROM USER WHERE id=#{id} AND password=#{password}")
+    int login(@Param("id") String id, @Param("password") String password);
 }

@@ -18,6 +18,9 @@ public class AccountRepository {
 	@Autowired
 	AccountMapper accountMapper;
 	
+	public int login(String id, String password) {
+		return accountMapper.login(id, password);
+	}
 	
 	public Account save(Account account,String role){
 		accountMapper.insertUser(account);

@@ -92,6 +92,11 @@ public class AccountService implements UserDetailsService{
 		account.setEnabled(true);
 		return accounts.save(account, role);
 	}
+	
+	public int login(String id, String password) {
+		// TODO Auto-generated method stub
+		return accounts.login(id, password);
+	}
 
 	public Collection<GrantedAuthority> getAuthorities(String username) 
 	{ 

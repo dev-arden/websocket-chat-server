@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -44,19 +45,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .frameOptions().sameOrigin() // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
         .and()
             .formLogin() // 권한없이 페이지 접근하면 로그인 페이지로 이동한다.
-            //.loginPage("/login") // 로그인 페이지 링크
+            .loginPage("/sessions") // 로그인 페이지 링크
+            //.loginPage("/account/login")
+            .loginProcessingUrl("/sessions")
+            .usernameParameter("id")
+            .passwordParameter("password")
             .defaultSuccessUrl("/chat/room") // 로그인 성공 후 리다이렉트 주소
         .and()
 	        .logout() // 8
-	        .logoutSuccessUrl("/login") // 로그아웃 성공시 리다이렉트 주소
+	        .logoutSuccessUrl("/sessions") // 로그아웃 성공시 리다이렉트 주소
 	    .and()
             .authorizeRequests()
-	            .antMatchers("/login", "/signup", "/members").permitAll() // 누구나 접근 허용
+            	.antMatchers("/webjars/**").permitAll()
+	            .antMatchers("/sessions", "/members").permitAll() // 누구나 접근 허용
 	            .antMatchers("/chat/**").hasRole("USER") // USER, ADMIN만 접근 가능
 	            .antMatchers("/admin").hasRole("ADMIN") // ADMIN만 접근 가능
 	            .anyRequest().authenticated() // 나머지 요청들은 권한의 종류에 상관 없이 권한이 있어야 접근 가능
 	         ;
 	}
+	
+//	@Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/**/css", "/**/js");
+//    }
 	
 	
 	@Bean
