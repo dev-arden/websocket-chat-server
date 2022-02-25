@@ -18,15 +18,15 @@ import com.websocket.chat.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Controller
+@RequiredArgsConstructor
 public class AccountController {
 	
-	@Autowired
-	AccountService accountService;
+	
+	private final AccountService accountService;
 
-	@Autowired
-	AccountMapper accountMapper;
+	
+	private final AccountMapper accountMapper;
 	
 	
 	
@@ -44,7 +44,7 @@ public class AccountController {
 	
 	@GetMapping("/members")
 	public String members(Model model) {
-		return "/account/signup";
+		return "account/signup";
 	}
 	
 	@PostMapping("/members")

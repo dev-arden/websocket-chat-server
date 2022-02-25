@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 import com.websocket.chat.model.Account;
 import com.websocket.chat.repository.AccountRepository;
 
+import lombok.RequiredArgsConstructor;
+
 
 @Service
+@RequiredArgsConstructor
 public class AccountService implements UserDetailsService{
 	
-	
-	@Autowired
-	AccountRepository accounts;
+	private final AccountRepository accounts;
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;

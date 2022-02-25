@@ -44,6 +44,10 @@
     	WHERE
     		roomId = #{roomId}
     </select>
+    
+    <insert id="createRoomAuth" parameterType="map">
+    	INSERT CHAT_USER (roomId, userId, auth) VALUES (#{roomId}, #{userId}, 1)
+    </insert>
 	
 	<!--  
 	<insert id="createRoom" parameterType="map">

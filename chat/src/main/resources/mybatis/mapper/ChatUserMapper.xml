@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- FAQ SQL Mapper -->
+<mapper namespace="com.websocket.chat.mapper.ChatUserMapper">
+	<resultMap type = "ChatUser" id = "ChatUser">
+		<result column="roomId" property="roomId" />
+		<result column="userId" property="userId" />
+		<result column="auth" property="auth" />
+	</resultMap> 
+	<insert id="requestRoom" parameterType="map">
+	    INSERT CHAT_USER (roomId, userId, auth) VALUES (#{roomId}, #{userId}, 0)
+	</insert>
+	
+	<update id="acceptRoom" parameterType="map">
+		UPDATE CHAT_USER 
+		SET auth = 1 
+		WHERE roomId = #{roomId}
+		AND userId = #{userId}	
+	</update>
+	
+	<delete id="denyRoom" parameterType="map">
+		DELETE 
+		FROM CHAT_USER
+		WHERE roomId = #{roomId}
+		AND userId = #{userId}
+	</delete>
+	 
+	<select id="checkRoom" resultType="int">
+		SELECT COUNT(*)
+		FROM CHAT_USER
+		WHERE roomId = #{roomId}
+		AND userId = #{userId}
+	</select>
+	
+	<select id="checkAuth" resultType="int">
+		SELECT auth
+		FROM CHAT_USER
+		WHERE roomId = #{roomId}
+		AND userId = #{userId}
+	</select>
+</mapper>

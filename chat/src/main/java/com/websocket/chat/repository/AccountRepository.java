@@ -12,11 +12,13 @@ import org.springframework.stereotype.Repository;
 import com.websocket.chat.mapper.AccountMapper;
 import com.websocket.chat.model.Account;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class AccountRepository {
 	
-	@Autowired
-	AccountMapper accountMapper;
+	private final AccountMapper accountMapper;
 	
 	public int login(String id, String password) {
 		return accountMapper.login(id, password);

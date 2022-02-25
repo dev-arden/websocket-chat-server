@@ -38,8 +38,12 @@ public class ChatRoomService {
 //	     chatRoom.setRoomId(chatRoom.getRoomId());
 	     //chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
 	     chatmapper.createRoom(chatRoom.getRoomId(), chatRoom.getName(), chatRoom.getOwnerId());
+	     String userId = ownerId;
+	     chatmapper.createRoomAuth(chatRoom.getRoomId(), userId);
 	     //return chatmapper.createChatroom(chatRoom.getRoomId(), chatRoom.getName());
 	 }
+	
+	 
 	 
 	 public String findOwner(String roomId) {
 		 return chatmapper.findOwner(roomId);

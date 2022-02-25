@@ -18,10 +18,18 @@
             <div class="col-md-6">
                 <h3>채팅방 리스트</h3>
             </div>
+        </div>
+        
+        <div class="row">
+        	<div class="col-md-6">
+                <h4>{{this.id}} 님 환영합니다.</h4>
+            </div>
             <div class="col-md-6 text-right">
                 <a class="btn btn-primary btn-sm" href="/logout">로그아웃</a>
             </div>
-        </div>
+        </div> 
+        
+        
         <div class="input-group">
             <div class="input-group-prepend">
                 <label class="input-group-text">방제목</label>
@@ -32,26 +40,81 @@
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.name)">
-                {{item.name}}
+            <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId">
+                {{item.name}} 
+                <div class="input-group-append">
+                	<button class="btn btn-primary" type="button" @click="requestRoom(item.roomId)">입장 요청</button>
+            	</div>
+            	<div class="input-group-append">
+                	<button class="btn btn-primary" type="button" @click="enterRoom(item.roomId, item.name)">입장 </button>
+            	</div>
+            </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="message in messages">
+                {{message.sender}} - {{message.message}} - {{message.roomId}} - {{message.type}}
+                <div class="input-group-append">
+                	<button class="btn btn-primary" type="button" @click="acceptRoom(message.roomId, message.sender)">입장 수락</button>
+            	</div>
+            	<div class="input-group-append">
+                	<button class="btn btn-primary" type="button" @click="denyRoom(message.roomId, message.sender)">입장 거절</button>
+            	</div>
             </li>
         </ul>
     </div>
     <!-- JavaScript -->
     <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
     <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+    <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
     <script>
+     // websocket & stomp initialize
+        var sock = new SockJS("/ws-stomp");
+        var ws = Stomp.over(sock);
+        var reconnect = 0;
         var vm = new Vue({
             el: '#app',
             data: {
+				url : '',
+				id : '',
                 room_name : '',
+                message: '',
+                messages: [],
                 chatrooms: [
                 ]
             },
             created() {
                 this.findAllRoom();
+                var _this = this;
+                axios.get('/chat/user').then(response => {
+                    _this.id = response.data;
+                    ws.connect({"name":_this.id}, function(frame) {
+                        ws.subscribe("/topic/user/"+_this.id, function(privatemessage) {
+                            var recv = JSON.parse(privatemessage.body);
+                            _this.recvMessage(recv);
+                        });
+                        _this.sendMessage('ENTER');
+                    }, function(error) {
+                        //alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+                        location.href="/chat/room";
+                    });
+                });
             },
             methods: {
+				sendUserMessage: function(type) {
+                    ws.send("/topic/user/" + this.id, JSON.stringify({type:type, roomId:this.roomId, message:this.message}));
+                    //ws.send("/app/chat/message", JSON.stringify({id:this.id ,type:type, roomId:this.roomId, message:this.message}));
+                    this.message = '';
+                },
+				sendMessage: function(type) {
+                    ws.send("/app/chat/private-message", {"id":this.id}, JSON.stringify({type:type, roomId:this.roomId, message:this.message}));
+                    //ws.send("/app/chat/message", JSON.stringify({id:this.id ,type:type, roomId:this.roomId, message:this.message}));
+                    this.message = '';
+                },
+                recvMessage: function(recv) {
+                    this.messages.unshift({"type":recv.type,"sender":recv.sender,"message":recv.message, "roomId" : recv.roomId})
+                    //this.messages.unshift({"id":recv.id,"type":recv.type,"sender":recv.sender,"message":recv.message})
+                },
                 findAllRoom: function() {
                     axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
                 },
@@ -62,10 +125,11 @@
                     } else {
                         var params = new URLSearchParams();
                         params.append("name",this.room_name);
+                        params.append("ownerId", this.id);
                         axios.post('/chat/room', params)
                         .then(
                             response => {
-                                alert(response.data.name+"방 개설에 성공하였습니다.")
+                                alert(this.room_name+"방 개설에 성공하였습니다.")
                                 this.room_name = '';
                                 this.findAllRoom();
                             }
@@ -76,8 +140,52 @@
                 enterRoom: function(roomId, roomName) {
                     localStorage.setItem('wschat.roomId',roomId);
                     localStorage.setItem('wschat.roomName',roomName);
-                    location.href="/chat/room/enter/"+roomId;
-                }
+                    //location.href="/chat/room/enter/"+roomId+'/user/'+this.id;
+                   	axios.get("/chat/room/enter/"+roomId+'/user/'+this.id)
+                   	.then(
+						response => {
+							this.url = response.data;
+							if(this.url.indexOf("<title>Websocket Chat</title>") == -1){
+							 	location.href="/chat/room/enter/"+roomId+'/user/'+this.id;
+							}
+						}
+					)
+                },
+               	requestRoom: function(roomId){
+					var params = new URLSearchParams();
+					//localStorage.setItem('wschat.roomId',roomId);
+                    params.append("roomId",roomId);
+                    params.append("userId", this.id);
+                    //this.sendUserMessage('TALK');
+                    axios.post('/chat/room/user', params)
+                    .then(
+                        response => {
+                            //alert("입장이 요청되었습니다.")
+                            this.findAllRoom();
+                        }
+                    )
+                    .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+				},
+				acceptRoom : function(roomId, sender){
+					var params = new URLSearchParams();
+                    params.append("roomId",roomId);
+                    params.append("userId", sender);
+                    axios.put('/chat/room/user', params)
+                    .then(
+                        response => {
+                            this.findAllRoom();
+                        }
+                    )
+                    .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+				},
+				denyRoom: function(roomId, sender){
+					axios.delete('/chat/room/'+roomId+'/user/'+sender)
+                    .then(
+						response => {
+							this.findAllRoom();
+						}
+					)
+				}
             }
         });
     </script>
