@@ -48,7 +48,7 @@ public class AccountController {
 	}
 	
 	@PostMapping("/members")
-	//@ResponseBody
+	@ResponseBody
 	public void addUser(@RequestParam String id, @RequestParam String password) {
 		Account account = new Account();
 		account.setId(id);

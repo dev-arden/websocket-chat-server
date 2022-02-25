@@ -54,7 +54,7 @@
                 password: ''
             },
             created() {
-                console.log("dddd");
+               
             },
             methods: {
                 login: function() {
@@ -64,13 +64,11 @@
                     axios.post('/sessions', params)
                     .then(
                         response => {
-                            alert("login!");
                             this.id = '';
                             this.password = '';
                             location.href="/chat/room";
                         }
                     )
-                    .catch( response => { alert("로그인에 실패하였습니."); } );
                 }     
             }
         });

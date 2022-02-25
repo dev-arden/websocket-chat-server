@@ -67,13 +67,13 @@ public class ChatRoomController {
 	     message.setRoomId(roomId);
 	     
 	     if(chatuserservice.checkRoom(roomId, userId) == 0){
-	    	 message.setType(ChatMessage.MessageType.ASK);
+	    	 //message.setType(ChatMessage.MessageType.ASK);
 	    	 message.setMessage(userId + "님은 입장을 요청하십시오.");
 	    	 messagingTemplate.convertAndSend("/topic/user/" + userId, message);
 	    	 return "/chat/room";
 	     }else {
 	    	 if(chatuserservice.checkAuth(roomId, userId) == 0) {
-	    		 message.setType(ChatMessage.MessageType.WAIT);
+	    		 //message.setType(ChatMessage.MessageType.WAIT);
 	    		 message.setMessage(userId + "님은 입장 요청이 아직 수락되지 않았습니다.");
 		    	 messagingTemplate.convertAndSend("/topic/user/" + userId, message);
 	    		 return "/chat/room";

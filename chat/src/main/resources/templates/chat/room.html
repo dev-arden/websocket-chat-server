@@ -42,23 +42,18 @@
         <ul class="list-group">
             <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId">
                 {{item.name}} 
-                <div class="input-group-append">
-                	<button class="btn btn-primary" type="button" @click="requestRoom(item.roomId)">입장 요청</button>
-            	</div>
-            	<div class="input-group-append">
-                	<button class="btn btn-primary" type="button" @click="enterRoom(item.roomId, item.name)">입장 </button>
-            	</div>
+                <button class="btn btn-primary" type="button" @click="requestRoom(item.roomId)">입장 요청</button>
+                <button class="btn btn-primary" type="button" @click="enterRoom(item.roomId, item.name)">입장 </button>    	
             </li>
         </ul>
+        
         <ul class="list-group">
             <li class="list-group-item" v-for="message in messages">
-                {{message.sender}} - {{message.message}} - {{message.roomId}} - {{message.type}}
-                <div class="input-group-append">
-                	<button class="btn btn-primary" type="button" @click="acceptRoom(message.roomId, message.sender)">입장 수락</button>
-            	</div>
-            	<div class="input-group-append">
-                	<button class="btn btn-primary" type="button" @click="denyRoom(message.roomId, message.sender)">입장 거절</button>
-            	</div>
+                {{message.message}}
+                
+                	<button class="btn btn-primary" type="button" v-if="message.type == 'ASK'" @click="acceptRoom(message.roomId, message.sender)">입장 수락</button>
+                	<button class="btn btn-primary" type="button" v-if="message.type == 'ASK'" @click="denyRoom(message.roomId, message.sender)">입장 거절</button>      	
+                
             </li>
         </ul>
     </div>
@@ -93,7 +88,7 @@
                             var recv = JSON.parse(privatemessage.body);
                             _this.recvMessage(recv);
                         });
-                        _this.sendMessage('ENTER');
+                        //_this.sendMessage('ENTER');
                     }, function(error) {
                         //alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
                         location.href="/chat/room";

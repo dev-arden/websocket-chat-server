@@ -45,23 +45,29 @@ public class ChatUserController {
 		//creator가 신청하는 경우
 		if(userId.equals(creatorId)) {
 			message.setMessage(name +"방을 만든" + userId + "님은 입장을 요청할 수 없습니다.");
+			message.setType(ChatMessage.MessageType.NOTI);
 			messagingTemplate.convertAndSend("/topic/user/" + userId, message);
 		}
 		//이미 입장을 요청한 사람이 또 요청하는 경우
 		else if(chatuserservice.checkRoom(roomId, userId) == 1){
 			if(chatuserservice.checkAuth(roomId, userId) == 0) {
 				message.setMessage(userId + "님은 " + name + "에 이미 입장을 요청했습니다.");
+				message.setType(ChatMessage.MessageType.NOTI);
 				messagingTemplate.convertAndSend("/topic/user/" + userId, message);
 				return ;
 			}else {
 				message.setMessage(userId + "님은 " + name + "에 입장 가능합니다.");
+				message.setType(ChatMessage.MessageType.NOTI);
 				messagingTemplate.convertAndSend("/topic/user/" + userId, message);
 				return ;
 			}
 		}else {
 			usermessage.setMessage(userId + "님은" + name + "에 입장을 요청했습니다.");
+			usermessage.setType(ChatMessage.MessageType.NOTI);
 			messagingTemplate.convertAndSend("/topic/user/" + userId, usermessage);
+			
 			message.setMessage(userId + "님이 " + name + "에 입장을 요청합니다.");
+			message.setType(ChatMessage.MessageType.ASK);
 			chatuserservice.requestRoom(roomId, userId);
 			messagingTemplate.convertAndSend("/topic/user/" + creatorId, message);
 		}
@@ -92,7 +98,6 @@ public class ChatUserController {
 		String creatorId = chatroomservice.findOwner(roomId);
 		
 		String name = chatroomservice.findRoomById(roomId).getName();
-		//String name = "dd";
 		
 		ChatMessage requestermessage = new ChatMessage();
 		ChatMessage creatormessage = new ChatMessage();
